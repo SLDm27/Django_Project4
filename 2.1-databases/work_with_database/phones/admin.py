@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from app.models import phones
+
+
+class PhoneAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'price',)
+
+
+admin.site.register(Phone, PhoneAdmin)
+

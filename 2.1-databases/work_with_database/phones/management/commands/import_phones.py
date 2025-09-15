@@ -1,21 +1,28 @@
 import csv
 
 from django.core.management.base import BaseCommand
-from django.template.defaultfilters import slugify
+from django.utils.text import slugify
 from phones.models import Phone
 
 
 class Command(BaseCommand):
+    help = 'Import phones from CSV file'
+
     def add_arguments(self, parser):
         pass
 
+
     def handle(self, *args, **options):
-        with open('phones.csv', 'r', encoding='utf-8') as file:
+        with open('phones.csv', 'r') as file:
             phones = list(csv.DictReader(file, delimiter=';'))
 
         for phone in phones:
-            id, name, image, price, release_date, lte_exists, slug = phone.values()
-            slug = slugify(name)
-            phone = Phone(id=id, name=name, price=price, image=image, release_date=release_date,
-                          lte_exists=lte_exists, slug=slug)
-            phone.save()
+            my_phone = Phone.objects.create(
+                id=int(phone['id']),
+                name=phone['name'],
+                price=int(phone['price']),
+                image=phone['image'],
+                release_date=phone['release_date'],
+                lte_exists=phone['lte_exists'],
+                slug=slugify(phone['name'])
+            )

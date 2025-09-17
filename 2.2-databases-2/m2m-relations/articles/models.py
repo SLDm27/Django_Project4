@@ -29,6 +29,6 @@ class Topic(models.Model):
 
 
 class Scope(models.Model):
-    article = models.ForeignKey('Article', on_delete=models.CASCADE, related_name='scopes')
-    topic = models.ForeignKey('Topic', on_delete=models.CASCADE, related_name='scopes')
+    article = models.ManyToManyField('Article', on_delete=models.CASCADE, related_name='scopes')
+    topic = models.ManyToManyField('Topic', on_delete=models.CASCADE, related_name='scopes')
     is_main = models.BooleanField(verbose_name='Основной раздел', default=False)
